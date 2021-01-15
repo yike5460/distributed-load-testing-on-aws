@@ -11,7 +11,15 @@ const dynamo = new AWS.DynamoDB.DocumentClient({
 
 exports.handler = async (event) => {
     console.log(JSON.stringify(event, null, 2));
-
+    // {
+    //     "scenario": {
+    //         "testId": "_Dx7DAuys",
+    //         "taskCount": 100,
+    //         "testType": "simple",
+    //         "fileType": "none"
+    //     },
+    //     "isRunning": false
+    // }
     const { scenario } = event;
     const { testId, taskCount, testType, fileType } = scenario;
     const API_INTERVAL = parseFloat(process.env.API_INTERVAL) || 10;

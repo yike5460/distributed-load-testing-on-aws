@@ -7,6 +7,29 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 declare var awsConfig;
 
+// uncomment for local debugging
+// let awsConfig = {
+//     // ...
+//     cw_dashboard: 'https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#dashboards:name=EcsLoadTesting-taBBErFMeQ94',
+//     ecs_dashboard: 'https://us-east-1.console.aws.amazon.com/ecs/home?region=us-east-1#/clusters/DLT/tasks',
+//     aws_project_region: 'us-east-1',
+//     // aws_cognito_region: 'us-east-1',
+//     // aws_cognito_identity_pool_id: 'us-east-1:7a95e632-8a17-4995-a58b-5dd0d7a40408',
+//     // aws_user_pools_id: 'us-east-1_Oxfg70TB1',
+//     // aws_user_pools_web_client_id: '4aik5f9fc2ihsme1s45oumsofe',
+//     oauth: {},
+//     aws_cloud_logic_custom: [
+//       {
+//         name: 'dlts',
+//         endpoint: 'https://ccbq80179d.execute-api.us-east-1.amazonaws.com/prod',
+//         region: 'us-east-1'
+//       }
+//     ],
+//     aws_user_files_s3_bucket: 'dlt-scenariosbucket-j3ppagp24or3',
+//     aws_user_files_s3_bucket_region: 'us-east-1',
+//     // ...
+//   };
+
 class Running extends React.Component {
 
     render() {

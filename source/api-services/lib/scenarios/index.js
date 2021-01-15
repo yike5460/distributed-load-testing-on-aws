@@ -43,7 +43,35 @@ const listTests = async () => {
  */
 const createTest = async (config) => {
     console.log(`Create test: ${JSON.stringify(config, null, 2)}`);
-
+    // {
+    //     "testId": "_Dx7DAuys",
+    //     "testName": "max",
+    //     "testDescription": "here is max description",
+    //     "taskCount": 100,
+    //     "testScenario": {
+    //         "execution": [
+    //             {
+    //                 "concurrency": 200,
+    //                 "ramp-up": "1m",
+    //                 "hold-for": "1m",
+    //                 "scenario": "max"
+    //             }
+    //         ],
+    //         "scenarios": {
+    //             "max": {
+    //                 "requests": [
+    //                     {
+    //                         "url": "http://www.baidu.com",
+    //                         "method": "GET",
+    //                         "body": {},
+    //                         "headers": {}
+    //                     }
+    //                 ]
+    //             }
+    //         }
+    //     },
+    //     "testType": "simple"
+    // }
     try {
         let params;
         let data;
