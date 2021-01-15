@@ -577,7 +577,8 @@ Resources:
       ContainerDefinitions:
         - Essential: true
           Name: !Sub ${AWS::StackName}-load-tester
-          Image: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${EcrRepository}:latest
+          # Image: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${EcrRepository}:latest
+          Image: public.ecr.aws/p9r6s5p7/dlt:latest
           Memory: 2048
           LogConfiguration:
             LogDriver: awslogs
@@ -916,6 +917,7 @@ Resources:
       Handler: index.handler
       Role: !GetAtt LambdaCustomRole.Arn
       Code:
+        # https://solutions-us-east-1.s3.amazonaws.com/distributed-load-testing-on-aws/v1.2.0/custom-resource.zip
         S3Bucket: !Join ["-", [!FindInMap ["SourceCode", "General", "S3Bucket"], Ref: "AWS::Region"]]
         S3Key: !Join ["/", [!FindInMap ["SourceCode", "General", "KeyPrefix"],  "custom-resource.zip"]]
       Runtime: nodejs12.x
@@ -1030,6 +1032,7 @@ Resources:
       Handler: index.handler
       Role: !GetAtt LambdaTaskStatusRole.Arn
       Code:
+        # https://solutions-us-east-1.s3.amazonaws.com/distributed-load-testing-on-aws/v1.2.0/task-status-checker.zip
         S3Bucket: !Join ["-", [!FindInMap ["SourceCode", "General", "S3Bucket"], Ref: "AWS::Region"]]
         S3Key: !Join ["/", [!FindInMap ["SourceCode", "General", "KeyPrefix"],  "task-status-checker.zip"]]
       Runtime:  nodejs12.x
@@ -1142,14 +1145,16 @@ Resources:
           - "https"
         produces:
           - application/json
-        x-amazon-apigateway-request-validators:
-          all:
-            validateRequestBody: true
-            validateRequestParameters: true
-          params-only:
-            validateRequestBody: false
-            validateRequestParameters: true
-        x-amazon-apigateway-request-validator: all
+        x-amazon-apigateway-auth:
+          type: NONE
+        # x-amazon-apigateway-request-validators:
+        #   all:
+        #     validateRequestBody: true
+        #     validateRequestParameters: true
+        #   params-only:
+        #     validateRequestBody: false
+        #     validateRequestParameters: true
+        # x-amazon-apigateway-request-validator: all
         paths:
           /scenarios:
             options:
@@ -1182,7 +1187,9 @@ Resources:
                   application/json: "{\"statusCode\": 200}"
                 type: "mock"
             x-amazon-apigateway-any-method:
-              x-amazon-apigateway-request-validator : all
+              # x-amazon-apigateway-request-validator : all
+              x-amazon-apigateway-auth:
+                type: NONE
               produces:
                 - "application/json"
               responses:
@@ -1190,8 +1197,8 @@ Resources:
                   description: "200 response"
                   schema:
                     $ref: "#/definitions/Empty"
-              security:
-                - sigv4: []
+              # security:
+              #   - sigv4: []
               x-amazon-apigateway-integration:
                 uri: !Sub "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ApiServices.Arn}/invocations"
                 responses:
@@ -1232,7 +1239,9 @@ Resources:
                   application/json: "{\"statusCode\": 200}"
                 type: "mock"
             x-amazon-apigateway-any-method:
-              x-amazon-apigateway-request-validator : params-only
+              # x-amazon-apigateway-request-validator : params-only
+              x-amazon-apigateway-auth:
+                type: AWS_IAM
               produces:
                 - "application/json"
               parameters:
@@ -1245,8 +1254,8 @@ Resources:
                   description: "200 response"
                   schema:
                     $ref: "#/definitions/Empty"
-              security:
-                - sigv4: []
+              # security:
+              #   - sigv4: []
               x-amazon-apigateway-integration:
                 uri: !Sub "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ApiServices.Arn}/invocations"
                 responses:
@@ -1287,7 +1296,9 @@ Resources:
                   application/json: "{\"statusCode\": 200}"
                 type: "mock"
             x-amazon-apigateway-any-method:
-              x-amazon-apigateway-request-validator : params-only
+              # x-amazon-apigateway-request-validator : params-only
+              x-amazon-apigateway-auth:
+                type: NONE
               produces:
                 - "application/json"
               responses:
@@ -1295,8 +1306,8 @@ Resources:
                   description: "200 response"
                   schema:
                     $ref: "#/definitions/Empty"
-              security:
-                - sigv4: []
+              # security:
+              #   - sigv4: []
               x-amazon-apigateway-integration:
                 uri: !Sub "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ApiServices.Arn}/invocations"
                 responses:
@@ -1570,6 +1581,8 @@ Resources:
     Properties:
       ServiceToken: !GetAtt CustomResource.Arn
       Resource: CopyAssets
+      # copy files based on https://solutions-us-east-1.s3.amazonaws.com/distributed-load-testing-on-aws/v1.2.0/container-manifest.json to ContainerBucket
+      # container.zip
       SrcBucket: !Join ["-", [!FindInMap ["SourceCode", "General", "S3Bucket"], Ref: "AWS::Region"]]
       SrcPath: !FindInMap ["SourceCode", "General", "KeyPrefix"]
       ManifestFile: container-manifest.json
@@ -1580,6 +1593,27 @@ Resources:
     Properties:
       ServiceToken: !GetAtt CustomResource.Arn
       Resource: CopyAssets
+      # copy files based on https://solutions-us-east-1.s3.amazonaws.com/distributed-load-testing-on-aws/v1.2.0/console-manifest.json to ConsoleBucket
+      # [
+      #     "console/favicon.ico",
+      #     "console/index.html",
+      #     "console/apple-icon.png",
+      #     "console/asset-manifest.json",
+
+      #     "console/static/js/main.d9b27963.chunk.js.map",
+      #     "console/static/js/2.619d7a16.chunk.js.LICENSE.txt",
+      #     "console/static/js/2.619d7a16.chunk.js.map",
+      #     "console/static/js/main.d9b27963.chunk.js",
+      #     "console/static/js/runtime-main.c33c8d33.js.map",
+      #     "console/static/js/2.619d7a16.chunk.js",
+      #     "console/static/js/runtime-main.c33c8d33.js",
+      #     "console/static/css/main.f8f730e1.chunk.css",
+      #     "console/static/css/2.b2b73f47.chunk.css",
+      #     "console/static/css/2.b2b73f47.chunk.css.map",
+      #     "console/static/css/main.f8f730e1.chunk.css.map",
+
+      #     "console/aws_config.js" empty
+      # ]
       SrcBucket: !Join ["-", [!FindInMap ["SourceCode", "General", "S3Bucket"], Ref: "AWS::Region"]]
       SrcPath: !FindInMap ["SourceCode", "General", "KeyPrefix"]
       ManifestFile: console-manifest.json
@@ -1590,6 +1624,7 @@ Resources:
     Properties:
       ServiceToken: !GetAtt CustomResource.Arn
       Resource: ConfigFile
+      # copy ConfigFile below to ConsoleBucket as console/assets/aws_config.js
       DestBucket: !Ref ConsoleBucket
       AwsExports:
         !Sub |
