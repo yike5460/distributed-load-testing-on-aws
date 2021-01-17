@@ -106,9 +106,9 @@ Resources:
         - !Ref LambdaApiRole
         - !Ref LambdaResultsRole
         - !Ref EcsTaskExecutionRole
-        - !Ref ContainerCodeBuildRole
-        - !Ref ContainerCodePipelineRole
-        - !Ref LambdaEcrCheckerRole
+        # - !Ref ContainerCodeBuildRole
+        # - !Ref ContainerCodePipelineRole
+        # - !Ref LambdaEcrCheckerRole
         - !Ref LambdaTaskStatusRole
         - !Ref LambdaCustomRole
         - !Ref LambdaTaskRole
@@ -152,7 +152,7 @@ Resources:
         - !Ref LambdaApiRole
         - !Ref LambdaResultsRole
         - !Ref LambdaTaskRole
-        - !Ref LambdaEcrCheckerRole
+        # - !Ref LambdaEcrCheckerRole
         - !Ref LambdaTaskStatusRole
       PolicyDocument:
         Version: 2012-10-17
@@ -273,33 +273,33 @@ Resources:
           - id: W11
             reason: ecs:ListTasks cannot specify resource level.
 
-  LambdaEcrCheckerRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - lambda.amazonaws.com
-            Action:
-              - sts:AssumeRole
-      Policies:
-        - PolicyName: !Sub ${AWS::StackName}-ecr-checker-policy
-          PolicyDocument:
-            Statement:
-              - Effect: Allow
-                Action:
-                  - ecr:DescribeImages
-                Resource:
-                  - !GetAtt EcrRepository.Arn
-              - Effect: Allow
-                Action:
-                  - codebuild:ListBuildsForProject
-                  - codebuild:BatchGetBuilds
-                Resource:
-                  - !GetAtt ContainerCodeBuild.Arn
+  # LambdaEcrCheckerRole:
+  #   Type: AWS::IAM::Role
+  #   Properties:
+  #     AssumeRolePolicyDocument:
+  #       Version: 2012-10-17
+  #       Statement:
+  #         - Effect: Allow
+  #           Principal:
+  #             Service:
+  #               - lambda.amazonaws.com
+  #           Action:
+  #             - sts:AssumeRole
+  #     Policies:
+  #       - PolicyName: !Sub ${AWS::StackName}-ecr-checker-policy
+  #         PolicyDocument:
+  #           Statement:
+  #             - Effect: Allow
+  #               Action:
+  #                 - ecr:DescribeImages
+  #               Resource:
+  #                 - !GetAtt EcrRepository.Arn
+  #             - Effect: Allow
+  #               Action:
+  #                 - codebuild:ListBuildsForProject
+  #                 - codebuild:BatchGetBuilds
+  #               Resource:
+  #                 - !GetAtt ContainerCodeBuild.Arn
 
   LambdaResultsRole:
     Type: AWS::IAM::Role
@@ -370,86 +370,86 @@ Resources:
       ManagedPolicyArns:
         - !Sub "arn:${AWS::Partition}:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 
-  ContainerCodeBuildRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: Allow
-            Action: sts:AssumeRole
-            Principal:
-              Service: codebuild.amazonaws.com
-      Policies:
-        - PolicyName: !Sub ${AWS::StackName}-code-build-policy
-          PolicyDocument:
-            Statement:
-              - Effect: Allow
-                Action:
-                  - ecr:DescribeImages
-                  - ecr:PutImage
-                  - ecr:UploadLayerPart
-                  - ecr:CompleteLayerUpload
-                  - ecr:InitiateLayerUpload
-                  - ecr:GetDownloadUrlForLayer
-                  - ecr:ListImages
-                  - ecr:BatchCheckLayerAvailability
-                  - ecr:GetRepositoryPolicy
-                Resource:
-                  - !Sub ${EcrRepository.Arn}
-              - Effect: Allow
-                Action:
-                  - ecr:GetAuthorizationToken
-                Resource: "*"
-              - Effect: Allow
-                Action:
-                  - s3:GetObject
-                  - s3:GetObjectVersion
-                  - s3:GetBucketVersioning
-                  - s3:GetObjectVersion
-                  - s3:ListBucketVersions
-                  - s3:PutObject
-                Resource:
-                    - !Sub ${ContainerBucket.Arn}
-                    - !Sub ${ContainerBucket.Arn}/*
-    Metadata:
-      cfn_nag:
-        rules_to_suppress:
-          - id: W11
-            reason: ecr:GetAuthorizationToken does not support resource level permission.
+  # ContainerCodeBuildRole:
+  #   Type: AWS::IAM::Role
+  #   Properties:
+  #     AssumeRolePolicyDocument:
+  #       Version: "2012-10-17"
+  #       Statement:
+  #         - Effect: Allow
+  #           Action: sts:AssumeRole
+  #           Principal:
+  #             Service: codebuild.amazonaws.com
+  #     Policies:
+  #       - PolicyName: !Sub ${AWS::StackName}-code-build-policy
+  #         PolicyDocument:
+  #           Statement:
+  #             - Effect: Allow
+  #               Action:
+  #                 - ecr:DescribeImages
+  #                 - ecr:PutImage
+  #                 - ecr:UploadLayerPart
+  #                 - ecr:CompleteLayerUpload
+  #                 - ecr:InitiateLayerUpload
+  #                 - ecr:GetDownloadUrlForLayer
+  #                 - ecr:ListImages
+  #                 - ecr:BatchCheckLayerAvailability
+  #                 - ecr:GetRepositoryPolicy
+  #               Resource:
+  #                 - !Sub ${EcrRepository.Arn}
+  #             - Effect: Allow
+  #               Action:
+  #                 - ecr:GetAuthorizationToken
+  #               Resource: "*"
+  #             - Effect: Allow
+  #               Action:
+  #                 - s3:GetObject
+  #                 - s3:GetObjectVersion
+  #                 - s3:GetBucketVersioning
+  #                 - s3:GetObjectVersion
+  #                 - s3:ListBucketVersions
+  #                 - s3:PutObject
+  #               Resource:
+  #                   - !Sub ${ContainerBucket.Arn}
+  #                   - !Sub ${ContainerBucket.Arn}/*
+  #   Metadata:
+  #     cfn_nag:
+  #       rules_to_suppress:
+  #         - id: W11
+  #           reason: ecr:GetAuthorizationToken does not support resource level permission.
 
-  ContainerCodePipelineRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - codepipeline.amazonaws.com
-            Action:
-              - sts:AssumeRole
-      Policies:
-        - PolicyName: !Sub ${AWS::StackName}-code-pipeline-policy
-          PolicyDocument:
-            Statement:
-              - Effect: Allow
-                Action:
-                  - s3:GetObject
-                  - s3:GetObjectVersion
-                  - s3:GetBucketVersioning
-                  - s3:ListBucketVersions
-                  - s3:PutObject
-                Resource:
-                  - !Sub ${ContainerBucket.Arn}
-                  - !Sub ${ContainerBucket.Arn}/*
-              - Effect: Allow
-                Action:
-                  - codebuild:StartBuild
-                  - codebuild:BatchGetBuilds
-                Resource:
-                  - !Sub ${ContainerCodeBuild.Arn}
+  # ContainerCodePipelineRole:
+  #   Type: AWS::IAM::Role
+  #   Properties:
+  #     AssumeRolePolicyDocument:
+  #       Version: 2012-10-17
+  #       Statement:
+  #         - Effect: Allow
+  #           Principal:
+  #             Service:
+  #               - codepipeline.amazonaws.com
+  #           Action:
+  #             - sts:AssumeRole
+  #     Policies:
+  #       - PolicyName: !Sub ${AWS::StackName}-code-pipeline-policy
+  #         PolicyDocument:
+  #           Statement:
+  #             - Effect: Allow
+  #               Action:
+  #                 - s3:GetObject
+  #                 - s3:GetObjectVersion
+  #                 - s3:GetBucketVersioning
+  #                 - s3:ListBucketVersions
+  #                 - s3:PutObject
+  #               Resource:
+  #                 - !Sub ${ContainerBucket.Arn}
+  #                 - !Sub ${ContainerBucket.Arn}/*
+  #             - Effect: Allow
+  #               Action:
+  #                 - codebuild:StartBuild
+  #                 - codebuild:BatchGetBuilds
+  #               Resource:
+  #                 - !Sub ${ContainerCodeBuild.Arn}
 
   ApiLambdaInvoke:
     Type: AWS::Lambda::Permission
@@ -577,7 +577,8 @@ Resources:
       ContainerDefinitions:
         - Essential: true
           Name: !Sub ${AWS::StackName}-load-tester
-          Image: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${EcrRepository}:latest
+          # Image: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${EcrRepository}:latest
+          Image: public.ecr.aws/p9r6s5p7/dlt:latest
           Memory: 2048
           LogConfiguration:
             LogDriver: awslogs
@@ -824,88 +825,88 @@ Resources:
             reason: With the default CF certificate, we cannot set up the minimum protocol to TLS 1.2.
 
 ## Container Pipeline
-  ContainerCodeBuild:
-    Type: AWS::CodeBuild::Project
-    Properties:
-      Description: Builds distributed load testing suite
-      TimeoutInMinutes: 20
-      ServiceRole: !GetAtt ContainerCodeBuildRole.Arn
-      EncryptionKey: !Sub arn:${AWS::Partition}:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3
-      Artifacts:
-        Type: CODEPIPELINE
-      Environment:
-        Type: LINUX_CONTAINER
-        ComputeType: BUILD_GENERAL1_MEDIUM
-        Image: aws/codebuild/standard:4.0
-        PrivilegedMode: True
-        EnvironmentVariables:
-          - Name: REPOSITORY
-            Value: !Sub ${EcrRepository}
-          - Name: REPOSITORY_URI
-            Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${EcrRepository}
-      Source:
-        Type: CODEPIPELINE
-        BuildSpec: !Sub |
-          version: 0.2
-          phases:
-              pre_build:
-                commands:
-                  - aws --version
-                  - echo $REPOSITORY
-                  - echo $REPOSITORY_URI
-                  - aws ecr get-login-password --region ${AWS::Region} | docker login --username AWS --password-stdin $REPOSITORY_URI
-              build:
-                commands:
-                  - docker build -t $REPOSITORY:latest .
-                  - docker tag $REPOSITORY:latest $REPOSITORY_URI:latest
-              post_build:
-                commands:
-                  - docker push $REPOSITORY_URI:latest
-      Tags:
-        - Key: SolutionId
-          Value: SO0062
+  # ContainerCodeBuild:
+  #   Type: AWS::CodeBuild::Project
+  #   Properties:
+  #     Description: Builds distributed load testing suite
+  #     TimeoutInMinutes: 20
+  #     ServiceRole: !GetAtt ContainerCodeBuildRole.Arn
+  #     EncryptionKey: !Sub arn:${AWS::Partition}:kms:${AWS::Region}:${AWS::AccountId}:alias/aws/s3
+  #     Artifacts:
+  #       Type: CODEPIPELINE
+  #     Environment:
+  #       Type: LINUX_CONTAINER
+  #       ComputeType: BUILD_GENERAL1_MEDIUM
+  #       Image: aws/codebuild/standard:4.0
+  #       PrivilegedMode: True
+  #       EnvironmentVariables:
+  #         - Name: REPOSITORY
+  #           Value: !Sub ${EcrRepository}
+  #         - Name: REPOSITORY_URI
+  #           Value: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${EcrRepository}
+  #     Source:
+  #       Type: CODEPIPELINE
+  #       BuildSpec: !Sub |
+  #         version: 0.2
+  #         phases:
+  #             pre_build:
+  #               commands:
+  #                 - aws --version
+  #                 - echo $REPOSITORY
+  #                 - echo $REPOSITORY_URI
+  #                 - aws ecr get-login-password --region ${AWS::Region} | docker login --username AWS --password-stdin $REPOSITORY_URI
+  #             build:
+  #               commands:
+  #                 - docker build -t $REPOSITORY:latest .
+  #                 - docker tag $REPOSITORY:latest $REPOSITORY_URI:latest
+  #             post_build:
+  #               commands:
+  #                 - docker push $REPOSITORY_URI:latest
+  #     Tags:
+  #       - Key: SolutionId
+  #         Value: SO0062
 
-  ContainerCodePipeline:
-    #wait for the container
-    DependsOn: [ CopyDockerFile, CloudWatchLogsPolicy]
-    Type: AWS::CodePipeline::Pipeline
-    Properties:
-      RoleArn: !GetAtt ContainerCodePipelineRole.Arn
-      ArtifactStore:
-        Type: S3
-        Location: !Ref ContainerBucket
-      Stages:
-        - Name: Source
-          Actions:
-            - Name: Source
-              ActionTypeId:
-                Category: Source
-                Provider: S3
-                Owner: AWS
-                Version: '1'
-              OutputArtifacts:
-                - Name: SourceOutput
-              Configuration:
-                S3Bucket: !Ref ContainerBucket
-                S3ObjectKey: container.zip
-        - Name: Build
-          Actions:
-            - Name: Build
-              ActionTypeId:
-                Category: Build
-                Owner: AWS
-                Version: '1'
-                Provider: CodeBuild
-              InputArtifacts:
-                - Name: SourceOutput
-              OutputArtifacts:
-                - Name: BuildOutput
-              Configuration:
-                ProjectName:
-                  !Ref ContainerCodeBuild
-      Tags:
-        - Key: SolutionId
-          Value: SO0062
+  # ContainerCodePipeline:
+  #   #wait for the container
+  #   DependsOn: [ CopyDockerFile, CloudWatchLogsPolicy]
+  #   Type: AWS::CodePipeline::Pipeline
+  #   Properties:
+  #     RoleArn: !GetAtt ContainerCodePipelineRole.Arn
+  #     ArtifactStore:
+  #       Type: S3
+  #       Location: !Ref ContainerBucket
+  #     Stages:
+  #       - Name: Source
+  #         Actions:
+  #           - Name: Source
+  #             ActionTypeId:
+  #               Category: Source
+  #               Provider: S3
+  #               Owner: AWS
+  #               Version: '1'
+  #             OutputArtifacts:
+  #               - Name: SourceOutput
+  #             Configuration:
+  #               S3Bucket: !Ref ContainerBucket
+  #               S3ObjectKey: container.zip
+  #       - Name: Build
+  #         Actions:
+  #           - Name: Build
+  #             ActionTypeId:
+  #               Category: Build
+  #               Owner: AWS
+  #               Version: '1'
+  #               Provider: CodeBuild
+  #             InputArtifacts:
+  #               - Name: SourceOutput
+  #             OutputArtifacts:
+  #               - Name: BuildOutput
+  #             Configuration:
+  #               ProjectName:
+  #                 !Ref ContainerCodeBuild
+  #     Tags:
+  #       - Key: SolutionId
+  #         Value: SO0062
 
 ## Lambda
   CustomResource:
@@ -916,6 +917,7 @@ Resources:
       Handler: index.handler
       Role: !GetAtt LambdaCustomRole.Arn
       Code:
+        # https://solutions-us-east-1.s3.amazonaws.com/distributed-load-testing-on-aws/v1.2.0/custom-resource.zip
         S3Bucket: !Join ["-", [!FindInMap ["SourceCode", "General", "S3Bucket"], Ref: "AWS::Region"]]
         S3Key: !Join ["/", [!FindInMap ["SourceCode", "General", "KeyPrefix"],  "custom-resource.zip"]]
       Runtime: nodejs12.x
@@ -1030,6 +1032,7 @@ Resources:
       Handler: index.handler
       Role: !GetAtt LambdaTaskStatusRole.Arn
       Code:
+        # https://solutions-us-east-1.s3.amazonaws.com/distributed-load-testing-on-aws/v1.2.0/task-status-checker.zip
         S3Bucket: !Join ["-", [!FindInMap ["SourceCode", "General", "S3Bucket"], Ref: "AWS::Region"]]
         S3Key: !Join ["/", [!FindInMap ["SourceCode", "General", "KeyPrefix"],  "task-status-checker.zip"]]
       Runtime:  nodejs12.x
@@ -1047,26 +1050,26 @@ Resources:
           - id: W58
             reason: CloudWatchLogsPolicy covers a permission to write CloudWatch logs.
 
-  EcrChecker:
-    Type: AWS::Lambda::Function
-    Properties:
-      Description: ECR readiness checker
-      Handler: index.handler
-      Role: !GetAtt LambdaEcrCheckerRole.Arn
-      Code:
-        S3Bucket: !Join ["-", [!FindInMap ["SourceCode", "General", "S3Bucket"], Ref: "AWS::Region"]]
-        S3Key: !Join ["/", [!FindInMap ["SourceCode", "General", "KeyPrefix"],  "ecr-checker.zip"]]
-      Runtime:  nodejs12.x
-      Timeout: 60
-      Environment:
-        Variables:
-          CODE_BUILD_PROJECT: !Ref ContainerCodeBuild
-          ECR_REPOSITORY_NAME: !Ref EcrRepository
-          SCENARIOS_TABLE: !Ref ScenariosTable
-      Tags:
-        - Key: SolutionId
-          Value: SO0062
-    Metadata:
+  # EcrChecker:
+  #   Type: AWS::Lambda::Function
+  #   Properties:
+  #     Description: ECR readiness checker
+  #     Handler: index.handler
+  #     Role: !GetAtt LambdaEcrCheckerRole.Arn
+  #     Code:
+  #       S3Bucket: !Join ["-", [!FindInMap ["SourceCode", "General", "S3Bucket"], Ref: "AWS::Region"]]
+  #       S3Key: !Join ["/", [!FindInMap ["SourceCode", "General", "KeyPrefix"],  "ecr-checker.zip"]]
+  #     Runtime:  nodejs12.x
+  #     Timeout: 60
+  #     Environment:
+  #       Variables:
+  #         CODE_BUILD_PROJECT: !Ref ContainerCodeBuild
+  #         ECR_REPOSITORY_NAME: !Ref EcrRepository
+  #         SCENARIOS_TABLE: !Ref ScenariosTable
+  #     Tags:
+  #       - Key: SolutionId
+  #         Value: SO0062
+  #   Metadata:
       cfn_nag:
         rules_to_suppress:
           - id: W58
@@ -1142,14 +1145,16 @@ Resources:
           - "https"
         produces:
           - application/json
-        x-amazon-apigateway-request-validators:
-          all:
-            validateRequestBody: true
-            validateRequestParameters: true
-          params-only:
-            validateRequestBody: false
-            validateRequestParameters: true
-        x-amazon-apigateway-request-validator: all
+        x-amazon-apigateway-auth:
+          type: NONE
+        # x-amazon-apigateway-request-validators:
+        #   all:
+        #     validateRequestBody: true
+        #     validateRequestParameters: true
+        #   params-only:
+        #     validateRequestBody: false
+        #     validateRequestParameters: true
+        # x-amazon-apigateway-request-validator: all
         paths:
           /scenarios:
             options:
@@ -1182,7 +1187,9 @@ Resources:
                   application/json: "{\"statusCode\": 200}"
                 type: "mock"
             x-amazon-apigateway-any-method:
-              x-amazon-apigateway-request-validator : all
+              # x-amazon-apigateway-request-validator : all
+              x-amazon-apigateway-auth:
+                type: NONE
               produces:
                 - "application/json"
               responses:
@@ -1190,8 +1197,8 @@ Resources:
                   description: "200 response"
                   schema:
                     $ref: "#/definitions/Empty"
-              security:
-                - sigv4: []
+              # security:
+              #   - sigv4: []
               x-amazon-apigateway-integration:
                 uri: !Sub "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ApiServices.Arn}/invocations"
                 responses:
@@ -1232,7 +1239,9 @@ Resources:
                   application/json: "{\"statusCode\": 200}"
                 type: "mock"
             x-amazon-apigateway-any-method:
-              x-amazon-apigateway-request-validator : params-only
+              # x-amazon-apigateway-request-validator : params-only
+              x-amazon-apigateway-auth:
+                type: AWS_IAM
               produces:
                 - "application/json"
               parameters:
@@ -1245,8 +1254,8 @@ Resources:
                   description: "200 response"
                   schema:
                     $ref: "#/definitions/Empty"
-              security:
-                - sigv4: []
+              # security:
+              #   - sigv4: []
               x-amazon-apigateway-integration:
                 uri: !Sub "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ApiServices.Arn}/invocations"
                 responses:
@@ -1287,7 +1296,9 @@ Resources:
                   application/json: "{\"statusCode\": 200}"
                 type: "mock"
             x-amazon-apigateway-any-method:
-              x-amazon-apigateway-request-validator : params-only
+              # x-amazon-apigateway-request-validator : params-only
+              x-amazon-apigateway-auth:
+                type: NONE
               produces:
                 - "application/json"
               responses:
@@ -1295,8 +1306,8 @@ Resources:
                   description: "200 response"
                   schema:
                     $ref: "#/definitions/Empty"
-              security:
-                - sigv4: []
+              # security:
+              #   - sigv4: []
               x-amazon-apigateway-integration:
                 uri: !Sub "arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${ApiServices.Arn}/invocations"
                 responses:
@@ -1318,122 +1329,122 @@ Resources:
             title: "Empty Schema"
 
 ## Cognito
-  CognitoAuthorizedRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Principal:
-              Federated: cognito-identity.amazonaws.com
-            Action:
-              - sts:AssumeRoleWithWebIdentity
-      Policies:
-        - PolicyName: !Sub ${AWS::StackName}-congnito-access-role
-          PolicyDocument:
-            Version: 2012-10-17
-            Statement:
-              - Effect: Allow
-                Action:
-                  - execute-api:Invoke
-                Resource: !Sub arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${Api}/prod/*
-              - Effect: Allow
-                Action:
-                  - s3:PutObject
-                  - s3:GetObject
-                Resource: !Sub ${ScenariosBucket.Arn}/public/*
+  # CognitoAuthorizedRole:
+  #   Type: AWS::IAM::Role
+  #   Properties:
+  #     AssumeRolePolicyDocument:
+  #       Version: 2012-10-17
+  #       Statement:
+  #         - Effect: Allow
+  #           Principal:
+  #             Federated: cognito-identity.amazonaws.com
+  #           Action:
+  #             - sts:AssumeRoleWithWebIdentity
+  #     Policies:
+  #       - PolicyName: !Sub ${AWS::StackName}-congnito-access-role
+  #         PolicyDocument:
+  #           Version: 2012-10-17
+  #           Statement:
+  #             - Effect: Allow
+  #               Action:
+  #                 - execute-api:Invoke
+  #               Resource: !Sub arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${Api}/prod/*
+  #             - Effect: Allow
+  #               Action:
+  #                 - s3:PutObject
+  #                 - s3:GetObject
+  #               Resource: !Sub ${ScenariosBucket.Arn}/public/*
 
-  CognitoUnAuthorizedRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: 2012-10-17
-        Statement:
-          - Effect: Allow
-            Principal:
-              Federated: cognito-identity.amazonaws.com
-            Action:
-              - sts:AssumeRoleWithWebIdentity
+  # CognitoUnAuthorizedRole:
+  #   Type: AWS::IAM::Role
+  #   Properties:
+  #     AssumeRolePolicyDocument:
+  #       Version: 2012-10-17
+  #       Statement:
+  #         - Effect: Allow
+  #           Principal:
+  #             Federated: cognito-identity.amazonaws.com
+  #           Action:
+  #             - sts:AssumeRoleWithWebIdentity
 
-  CognitoUserPool:
-    Type: AWS::Cognito::UserPool
-    Properties:
-      UserPoolName: !Sub ${AWS::StackName}
-      AdminCreateUserConfig:
-        AllowAdminCreateUserOnly: True
-        InviteMessageTemplate:
-          EmailMessage:
-            !Sub |
-              <p>You are invited to join the Distribution Load Testing Solution.</p>
-              <p>Username: <strong>{username}</strong></p>
-              <p>Password: <strong>{####}</strong></p>
-              <p>Console: <strong>https://${ConsoleCloudFront.DomainName}/</strong></p>
-          EmailSubject: Welcome to Distributed Load Testing
-          SMSMessage: "Your username is {username} and temporary password is {####}."
-        UnusedAccountValidityDays: 7
-      AliasAttributes:
-        - "email"
-      AutoVerifiedAttributes:
-        - "email"
-      EmailVerificationMessage: "Your Distribution Load Testing console verification code is {####}."
-      EmailVerificationSubject: "Your Distribution Load Testing console verification code"
-      Policies:
-        PasswordPolicy:
-          MinimumLength: 8
-          RequireLowercase: True
-          RequireNumbers: True
-          RequireSymbols: False
-          RequireUppercase: True
-      Schema:
-        - AttributeDataType: "String"
-          Name: "email"
-          Required: True
+  # CognitoUserPool:
+  #   Type: AWS::Cognito::UserPool
+  #   Properties:
+  #     UserPoolName: !Sub ${AWS::StackName}
+  #     AdminCreateUserConfig:
+  #       AllowAdminCreateUserOnly: True
+  #       InviteMessageTemplate:
+  #         EmailMessage:
+  #           !Sub |
+  #             <p>You are invited to join the Distribution Load Testing Solution.</p>
+  #             <p>Username: <strong>{username}</strong></p>
+  #             <p>Password: <strong>{####}</strong></p>
+  #             <p>Console: <strong>https://${ConsoleCloudFront.DomainName}/</strong></p>
+  #         EmailSubject: Welcome to Distributed Load Testing
+  #         SMSMessage: "Your username is {username} and temporary password is {####}."
+  #       UnusedAccountValidityDays: 7
+  #     AliasAttributes:
+  #       - "email"
+  #     AutoVerifiedAttributes:
+  #       - "email"
+  #     EmailVerificationMessage: "Your Distribution Load Testing console verification code is {####}."
+  #     EmailVerificationSubject: "Your Distribution Load Testing console verification code"
+  #     Policies:
+  #       PasswordPolicy:
+  #         MinimumLength: 8
+  #         RequireLowercase: True
+  #         RequireNumbers: True
+  #         RequireSymbols: False
+  #         RequireUppercase: True
+  #     Schema:
+  #       - AttributeDataType: "String"
+  #         Name: "email"
+  #         Required: True
 
-  CognitoUserPoolClient:
-    Type: AWS::Cognito::UserPoolClient
-    Properties:
-      ClientName: !Sub ${AWS::StackName}-app
-      GenerateSecret: False
-      WriteAttributes:
-        - "address"
-        - "email"
-        - "phone_number"
-      RefreshTokenValidity: 1
-      UserPoolId: !Ref CognitoUserPool
+  # CognitoUserPoolClient:
+  #   Type: AWS::Cognito::UserPoolClient
+  #   Properties:
+  #     ClientName: !Sub ${AWS::StackName}-app
+  #     GenerateSecret: False
+  #     WriteAttributes:
+  #       - "address"
+  #       - "email"
+  #       - "phone_number"
+  #     RefreshTokenValidity: 1
+  #     UserPoolId: !Ref CognitoUserPool
 
-  CognitoIdentityPool:
-    Type: AWS::Cognito::IdentityPool
-    Properties:
-      IdentityPoolName: !Sub ${AWS::StackName}
-      AllowUnauthenticatedIdentities: false
-      CognitoIdentityProviders:
-        - ClientId: !Ref CognitoUserPoolClient
-          ProviderName: !GetAtt CognitoUserPool.ProviderName
+  # CognitoIdentityPool:
+  #   Type: AWS::Cognito::IdentityPool
+  #   Properties:
+  #     IdentityPoolName: !Sub ${AWS::StackName}
+  #     AllowUnauthenticatedIdentities: false
+  #     CognitoIdentityProviders:
+  #       - ClientId: !Ref CognitoUserPoolClient
+  #         ProviderName: !GetAtt CognitoUserPool.ProviderName
 
-  CognitoAttachRole:
-    Type: AWS::Cognito::IdentityPoolRoleAttachment
-    Properties:
-      IdentityPoolId: !Ref CognitoIdentityPool
-      Roles:
-        unauthenticated: !GetAtt CognitoUnAuthorizedRole.Arn
-        authenticated: !GetAtt CognitoAuthorizedRole.Arn
+  # CognitoAttachRole:
+  #   Type: AWS::Cognito::IdentityPoolRoleAttachment
+  #   Properties:
+  #     IdentityPoolId: !Ref CognitoIdentityPool
+  #     Roles:
+  #       unauthenticated: !GetAtt CognitoUnAuthorizedRole.Arn
+  #       authenticated: !GetAtt CognitoAuthorizedRole.Arn
 
-  CognitoUser:
-    Type: AWS::Cognito::UserPoolUser
-    Properties:
-      DesiredDeliveryMediums:
-        - EMAIL
-      ForceAliasCreation: true
-      UserAttributes:
-        - Name: email
-          Value: !Ref AdminEmail
-        - Name: nickname
-          Value: !Ref AdminName
-        - Name: email_verified
-          Value: 'True'
-      Username: !Ref AdminName
-      UserPoolId: !Ref CognitoUserPool
+  # CognitoUser:
+  #   Type: AWS::Cognito::UserPoolUser
+  #   Properties:
+  #     DesiredDeliveryMediums:
+  #       - EMAIL
+  #     ForceAliasCreation: true
+  #     UserAttributes:
+  #       - Name: email
+  #         Value: !Ref AdminEmail
+  #       - Name: nickname
+  #         Value: !Ref AdminName
+  #       - Name: email_verified
+  #         Value: 'True'
+  #     Username: !Ref AdminName
+  #     UserPoolId: !Ref CognitoUserPool
 
 ## Step Functions
   TaskRunnerStepFunctions:
@@ -1443,32 +1454,8 @@ Resources:
       DefinitionString: !Sub |
         {
           "Comment": "Distributed Load Testing on AWS Task Runner",
-          "StartAt": "Check ECR is ready",
+          "StartAt": "Check running tests",
           "States": {
-            "Check ECR is ready": {
-              "Type": "Task",
-              "Resource": "${EcrChecker.Arn}",
-              "InputPath": "$",
-              "OutputPath": "$",
-              "Next": "ECR is ready?"
-            },
-            "ECR is ready?": {
-              "Type": "Choice",
-              "Choices": [
-                {
-                  "Variable": "$.ecrReady",
-                  "BooleanEquals": true,
-                  "Next": "Check running tests"
-                }
-              ],
-              "Default": "Wait 1 minute - ECR ready"
-            },
-            "Wait 1 minute - ECR ready": {
-              "Comment": "Wait 1 minute to check ECR readiness",
-              "Type": "Wait",
-              "Seconds": 60,
-              "Next": "Check ECR is ready"
-            },
             "Check running tests": {
               "Type": "Task",
               "Resource": "${TaskStatusChecker.Arn}",
@@ -1562,7 +1549,7 @@ Resources:
                   - !GetAtt TaskStatusChecker.Arn
                   - !GetAtt TaskRunner.Arn
                   - !GetAtt ResultsParser.Arn
-                  - !GetAtt EcrChecker.Arn
+                  # - !GetAtt EcrChecker.Arn
 
 ## Custom Resources
   CopyDockerFile:
@@ -1570,6 +1557,8 @@ Resources:
     Properties:
       ServiceToken: !GetAtt CustomResource.Arn
       Resource: CopyAssets
+      # copy files based on https://solutions-us-east-1.s3.amazonaws.com/distributed-load-testing-on-aws/v1.2.0/container-manifest.json to ContainerBucket
+      # container.zip
       SrcBucket: !Join ["-", [!FindInMap ["SourceCode", "General", "S3Bucket"], Ref: "AWS::Region"]]
       SrcPath: !FindInMap ["SourceCode", "General", "KeyPrefix"]
       ManifestFile: container-manifest.json
@@ -1580,6 +1569,27 @@ Resources:
     Properties:
       ServiceToken: !GetAtt CustomResource.Arn
       Resource: CopyAssets
+      # copy files based on https://solutions-us-east-1.s3.amazonaws.com/distributed-load-testing-on-aws/v1.2.0/console-manifest.json to ConsoleBucket
+      # [
+      #     "console/favicon.ico",
+      #     "console/index.html",
+      #     "console/apple-icon.png",
+      #     "console/asset-manifest.json",
+
+      #     "console/static/js/main.d9b27963.chunk.js.map",
+      #     "console/static/js/2.619d7a16.chunk.js.LICENSE.txt",
+      #     "console/static/js/2.619d7a16.chunk.js.map",
+      #     "console/static/js/main.d9b27963.chunk.js",
+      #     "console/static/js/runtime-main.c33c8d33.js.map",
+      #     "console/static/js/2.619d7a16.chunk.js",
+      #     "console/static/js/runtime-main.c33c8d33.js",
+      #     "console/static/css/main.f8f730e1.chunk.css",
+      #     "console/static/css/2.b2b73f47.chunk.css",
+      #     "console/static/css/2.b2b73f47.chunk.css.map",
+      #     "console/static/css/main.f8f730e1.chunk.css.map",
+
+      #     "console/aws_config.js" empty
+      # ]
       SrcBucket: !Join ["-", [!FindInMap ["SourceCode", "General", "S3Bucket"], Ref: "AWS::Region"]]
       SrcPath: !FindInMap ["SourceCode", "General", "KeyPrefix"]
       ManifestFile: console-manifest.json
@@ -1590,6 +1600,7 @@ Resources:
     Properties:
       ServiceToken: !GetAtt CustomResource.Arn
       Resource: ConfigFile
+      # copy ConfigFile below to ConsoleBucket as console/assets/aws_config.js
       DestBucket: !Ref ConsoleBucket
       AwsExports:
         !Sub |
@@ -1597,10 +1608,6 @@ Resources:
             cw_dashboard: 'https://console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#dashboards:name=${EcsLoadTesting}',
             ecs_dashboard: 'https://${AWS::Region}.console.aws.amazon.com/ecs/home?region=${AWS::Region}#/clusters/${AWS::StackName}/tasks',
             aws_project_region: '${AWS::Region}',
-            aws_cognito_region: '${AWS::Region}',
-            aws_cognito_identity_pool_id: '${CognitoIdentityPool}',
-            aws_user_pools_id: '${CognitoUserPool}',
-            aws_user_pools_web_client_id: '${CognitoUserPoolClient}',
             oauth: {},
             aws_cloud_logic_custom: [
               {
