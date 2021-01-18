@@ -775,13 +775,13 @@ Resources:
     Properties:
       DistributionConfig:
         Comment: "Website distribution for solution"
-        # Logging:
-        #   IncludeCookies: false
-        #   Bucket: !GetAtt LogsBucket.DomainName
-        #   Prefix: cloudfront-logs/
+        Logging:
+          IncludeCookies: false
+          Bucket: !GetAtt LogsBucket.DomainName
+          Prefix: cloudfront-logs/
         Origins:
             - Id: console
-              DomainName: !Sub "${ConsoleBucket}.s3.${AWS::Region}.amazonaws.com.cn"
+              DomainName: !Sub "${ConsoleBucket}.s3.${AWS::Region}.amazonaws.com"
               OriginPath: /console
               S3OriginConfig:
                   OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${ConsoleOriginAccessIdentity}"
@@ -802,7 +802,7 @@ Resources:
             ForwardedValues:
                 QueryString: false
             ViewerProtocolPolicy: redirect-to-https
-        IPV6Enabled: false
+        IPV6Enabled: true
         DefaultRootObject: "index.html"
         CustomErrorResponses:
           - ErrorCode: 404
@@ -1136,12 +1136,6 @@ Resources:
   Api:
     Type: AWS::ApiGateway::RestApi
     Properties:
-      EndpointConfiguration:
-        Types:
-        - REGIONAL
-      Parameters:
-        endpointConfigurationTypes: REGIONAL
-        ignore: documentation
       Body:
         swagger: "2.0"
         info:
@@ -1611,13 +1605,14 @@ Resources:
       AwsExports:
         !Sub |
           const awsConfig = {
-            cw_dashboard: 'https://console.amazonaws.cn/cloudwatch/home?region=${AWS::Region}#dashboards:name=${EcsLoadTesting}',
-            ecs_dashboard: 'https://${AWS::Region}.console.amazonaws.cn/ecs/home?region=${AWS::Region}#/clusters/${AWS::StackName}/tasks',
+            cw_dashboard: 'https://console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#dashboards:name=${EcsLoadTesting}',
+            ecs_dashboard: 'https://${AWS::Region}.console.aws.amazon.com/ecs/home?region=${AWS::Region}#/clusters/${AWS::StackName}/tasks',
+            aws_project_region: '${AWS::Region}',
             oauth: {},
             aws_cloud_logic_custom: [
               {
                 name: 'dlts',
-                endpoint: 'https://${Api}.execute-api.${AWS::Region}.amazonaws.com.cn/prod',
+                endpoint: 'https://${Api}.execute-api.${AWS::Region}.amazonaws.com/prod',
                 region: '${AWS::Region}'
               }
             ],
