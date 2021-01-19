@@ -1613,6 +1613,7 @@ Resources:
           const awsConfig = {
             cw_dashboard: 'https://console.amazonaws.cn/cloudwatch/home?region=${AWS::Region}#dashboards:name=${EcsLoadTesting}',
             ecs_dashboard: 'https://${AWS::Region}.console.amazonaws.cn/ecs/home?region=${AWS::Region}#/clusters/${AWS::StackName}/tasks',
+            aws_project_region: '${AWS::Region}',
             oauth: {},
             aws_cloud_logic_custom: [
               {
