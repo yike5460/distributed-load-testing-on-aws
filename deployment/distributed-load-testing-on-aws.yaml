@@ -1247,7 +1247,7 @@ Resources:
             x-amazon-apigateway-any-method:
               # x-amazon-apigateway-request-validator : params-only
               x-amazon-apigateway-auth:
-                type: AWS_IAM
+                type: NONE
               produces:
                 - "application/json"
               parameters:
