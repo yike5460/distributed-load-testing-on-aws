@@ -300,8 +300,8 @@ function results(content, testId) {
         };
         console.log(widget);
 
-        const image = await cloudwatch.getMetricWidgetImage(cwParams).promise();
-        const metricWidgetImage = Buffer.from(image.MetricWidgetImage).toString('base64');
+        // const image = await cloudwatch.getMetricWidgetImage(cwParams).promise();
+        const metricWidgetImage = 'notavailable' //Buffer.from(image.MetricWidgetImage).toString('base64');
 
         // Update Scenarios Table with final results and history.
         const history = {

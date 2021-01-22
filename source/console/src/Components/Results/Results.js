@@ -6,6 +6,8 @@ import { Row, Col, Button, Popover, PopoverHeader, PopoverBody, Nav, NavItem, Na
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
+declare var awsConfig;
+
 class Results extends React.Component {
     constructor(props) {
         super(props);
@@ -155,7 +157,7 @@ class Results extends React.Component {
                 </Row>
                 <Row>
                     <Col sm="3">
-                        <h3>Percentile Response Time</h3>
+                        <h2>返回时间百分比</h2>
                         <div className="result">
                             <b>100%:</b><span>{data.p100_0}s</span>
                         </div>
@@ -181,7 +183,16 @@ class Results extends React.Component {
                     {
                         metricWidgetImage &&
                         <Col sm="9">
-                            <img src={`data:image/jpeg;base64,${metricWidgetImage}`} alt='avRt' />
+                            {/* <img src={`data:image/jpeg;base64,${metricWidgetImage}`} alt='avRt' /> */}
+                            <h2>测试图表</h2>
+                            <div class="card">
+                                <div class="card-body">
+                                {/* <h4 class="card-title">Card title</h4> */}
+                                <p class="card-text">点击跳转到监控视图</p>
+                                {/* <a href="#" class="card-link">{awsConfig.cw_dashboard}</a> */}
+                                <a href={awsConfig.cw_dashboard} class="btn btn-info" role="button">CloudWatch Console</a>
+                                </div>
+                            </div>
                         </Col>
                     }
                 </Row>
@@ -213,7 +224,7 @@ class Results extends React.Component {
                 );
             }
         }
-
+        console.log(this.props.data)
         return (
             <div>
                 <div className="box">
@@ -223,7 +234,7 @@ class Results extends React.Component {
                         <Col xs="6" sm="3" md="3">
                             <Nav tabs vertical pills>
                                 <NavItem>
-                                    <NavLink className="custom-tab" active={this.state.activeTab === 'summary'} onClick={() => { this.toggleTab('summary') }}>Summary</NavLink>
+                                    <NavLink className="custom-tab" active={this.state.activeTab === 'summary'} onClick={() => { this.toggleTab('summary') }}>结果概览</NavLink>
                                 </NavItem>
                                 { labelTabs }
                             </Nav>
