@@ -8,7 +8,6 @@ class Results extends React.Component {
 
       render() {
         const history = this.props.data.history || [];
-
         return (
             <div>
                 <div className="box">
@@ -16,6 +15,7 @@ class Results extends React.Component {
                     <Table borderless responsive>
                         <thead>
                             <tr>
+                                <th>RPS</th>
                                 <th>RunTime</th>
                                 <th>AvgRt</th>
                                 <th>AvgLt</th>
@@ -33,6 +33,7 @@ class Results extends React.Component {
                         {
                             history.map (i => (
                                 <tr key= { i.id }>
+                                    <td>{ i.results.testDuration > 0 ? Math.round(i.results.throughput * 100 / i.results.testDuration) / 100 : '-' }</td>
                                     <td>{ i.endTime }</td>
                                     <td>{ i.results.avg_rt }</td>
                                     <td>{ i.results.avg_lt }</td>
