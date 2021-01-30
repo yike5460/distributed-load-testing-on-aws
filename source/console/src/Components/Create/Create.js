@@ -349,7 +349,7 @@ class Create extends React.Component {
                                     type="number"
                                     name="taskCount"
                                     id="taskCount"
-                                    max={100}
+                                    max={750}
                                     min={1}
                                     step={1}
                                     required
@@ -357,7 +357,7 @@ class Create extends React.Component {
                                 />
                                 <FormText color="muted">
                                     Number of docker containers that will be launched in the Fargate cluster to run the
-                                    test scenario, max value 100.
+                                    test scenario, max value 750.
                                 </FormText>
                             </FormGroup>
 
@@ -367,7 +367,7 @@ class Create extends React.Component {
                                     value={this.state.formValues.concurrency}
                                     className="form-short"
                                     type="number"
-                                    max={200}
+                                    max={500}
                                     min={1}
                                     step={1}
                                     name="concurrency"
@@ -376,7 +376,7 @@ class Create extends React.Component {
                                     onChange={this.handleInputChange}
                                 />
                                 <FormText color="muted">
-                                    The number of concurrent virtual users generated per task, max value 200.
+                                    The number of concurrent virtual users generated per task, max value 500.
                                 </FormText>
                             </FormGroup>
                             <FormGroup>

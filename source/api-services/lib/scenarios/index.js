@@ -160,7 +160,7 @@ const createTest = async (config) => {
         }
         if (!numRegex.test(taskCount)
             || parseInt(taskCount) < 1
-            || parseInt(taskCount) > 100) {
+            || parseInt(taskCount) > 750) {
             throw {
                 message: 'Task count should be positive number between 1 to 100.',
                 code: 'InvalidParameter',
@@ -175,9 +175,9 @@ const createTest = async (config) => {
         }
         if (!numRegex.test(testScenario.execution[0].concurrency)
             || parseInt(testScenario.execution[0].concurrency) < 1
-            || parseInt(testScenario.execution[0].concurrency) > 200) {
+            || parseInt(testScenario.execution[0].concurrency) > 500) {
             throw {
-                message: 'Concurrency should be positive number between 1 to 200.',
+                message: 'Concurrency should be positive number between 1 to 500.',
                 code: 'InvalidParameter',
                 status: 400
              };
@@ -190,6 +190,9 @@ const createTest = async (config) => {
         // Hold for
         validateTimeUnit('hold-for', 1);
 
+        for (var val in testScenario.scenarios) {
+            testScenario.scenarios[val].timeout = "5s"
+        }
         // Add reporting to Test Scenario so that the end results are export to
         // Amazon s3 by each task.
         testScenario.reporting = [{

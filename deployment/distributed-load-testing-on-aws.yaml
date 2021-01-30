@@ -59,7 +59,8 @@ Parameters:
     Description: Alternate Domain Names for CloudFront
     MinLength: 4
     MaxLength: 30
-    AllowedPattern: "^((https?)://)?(www.)?[a-z0-9]+(.[a-z0-9]{1,}){1,2}$"
+    # 6 subdomain at most, like dlt.keyi.solutions.aws.a2z.org.cn
+    AllowedPattern: "^((https?)://)?(www.)?[a-z0-9]+(.[a-z0-9]{1,}){1,6}$"
     ConstraintDescription: "must be valid CNAME name"
 
 Metadata:
@@ -1015,7 +1016,7 @@ Resources:
         S3Bucket: !Join ["-", [!FindInMap ["SourceCode", "General", "S3Bucket"], Ref: "AWS::Region"]]
         S3Key: !Join ["/", [!FindInMap ["SourceCode", "General", "KeyPrefix"],  "task-runner.zip"]]
       Runtime: nodejs12.x
-      Timeout: 180
+      Timeout: 900
       Environment:
         Variables:
           SCENARIOS_BUCKET: !Ref ScenariosBucket
