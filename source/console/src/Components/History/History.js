@@ -11,15 +11,15 @@ class Results extends React.Component {
         return (
             <div>
                 <div className="box">
-                    <h2>Results History</h2>
+                    <h2>历史结果</h2>
                     <Table borderless responsive>
                         <thead>
                             <tr>
-                                <th>RPS</th>
-                                <th>RunTime</th>
-                                <th>AvgRt</th>
-                                <th>AvgLt</th>
-                                <th>AvgCt</th>
+                                <th>每秒请求数量</th>
+                                <th>执行时间</th>
+                                <th>平均响应时间</th>
+                                <th>平均时延</th>
+                                <th>平均连接时间</th>
                                 <th>100%</th>
                                 <th>99.9%</th>
                                 <th>99.0%</th>

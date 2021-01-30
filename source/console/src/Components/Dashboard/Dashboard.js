@@ -78,19 +78,19 @@ class Dashboard extends React.Component {
         return (
             <div>
                 <div className="box">
-                    <h1>Test Scenarios</h1>
-                    <Button id="refreshButton" onClick={ this.getItems } size="sm">Refresh</Button>
+                    <h1>测试场景</h1>
+                    <Button id="refreshButton" onClick={ this.getItems } size="sm">刷新</Button>
                 </div>
                 <div className="box">
                     <Table className="dashboard" borderless responsive >
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Id</th>
-                                <th>Description</th>
-                                <th>Last Run (UTC)</th>
-                                <th>Status</th>
-                                <th className="td-center">Details</th>
+                                <th>名称</th>
+                                <th>标识</th>
+                                <th>描述</th>
+                                <th>上次运行时间 (UTC)</th>
+                                <th>状态</th>
+                                <th className="td-center">详情</th>
                             </tr>
                         </thead>
                         { tableBody }

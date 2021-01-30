@@ -26,29 +26,6 @@ import Details from './Components/Details/Details.js';
 
 declare var awsConfig;
 
-// uncomment for local debugging
-// let awsConfig = {
-//   // ...
-//   cw_dashboard: 'https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#dashboards:name=EcsLoadTesting-taBBErFMeQ94',
-//   ecs_dashboard: 'https://us-east-1.console.aws.amazon.com/ecs/home?region=us-east-1#/clusters/DLT/tasks',
-//   aws_project_region: 'us-east-1',
-//   // aws_cognito_region: 'us-east-1',
-//   // aws_cognito_identity_pool_id: 'us-east-1:7a95e632-8a17-4995-a58b-5dd0d7a40408',
-//   // aws_user_pools_id: 'us-east-1_Oxfg70TB1',
-//   // aws_user_pools_web_client_id: '4aik5f9fc2ihsme1s45oumsofe',
-//   oauth: {},
-//   aws_cloud_logic_custom: [
-//     {
-//       name: 'dlts',
-//       endpoint: 'https://ccbq80179d.execute-api.us-east-1.amazonaws.com/prod',
-//       region: 'us-east-1'
-//     }
-//   ],
-//   aws_user_files_s3_bucket: 'dlt-scenariosbucket-j3ppagp24or3',
-//   aws_user_files_s3_bucket_region: 'us-east-1',
-//   // ...
-// };
-
 Amplify.configure(awsConfig);
 
 const loginTheme = {
@@ -96,13 +73,13 @@ class App extends React.Component {
       <div>
         <Router>
           <Navbar color="dark" dark fixed="top" expand="md">
-            <NavbarBrand href="/"> <FontAwesomeIcon icon={faAws} size="lg" color="#FF9900" id="logo" /> Distributed Load Testing</NavbarBrand>
+            <NavbarBrand href="/"> <FontAwesomeIcon icon={faAws} size="lg" color="#FF9900" id="logo" /> 分布式压测平台 </NavbarBrand>
             <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
             <Collapse isOpen={!this.state.collapsed} navbar>
               <Nav className="mr-auto" navbar>
                 <NavItem>
                   <Link to={'/dashboard'} className="nav-link" id="dashboard">
-                    <FontAwesomeIcon id="icon" icon={faBars} /> Dashboard
+                    <FontAwesomeIcon id="icon" icon={faBars} /> 控制面板
                   </Link>
                 </NavItem>
                 <NavItem>
@@ -113,14 +90,14 @@ class App extends React.Component {
                         className="nav-link"
                         id="createTest"
                   >
-                    <FontAwesomeIcon id="icon" icon={faPlusSquare} /> Create Test
+                    <FontAwesomeIcon id="icon" icon={faPlusSquare} /> 创建测试
                   </Link>
                 </NavItem>
               </Nav>
               <Nav className="ml-auto" navbar>
                 <NavItem>
                   <Link to="" onClick={this.signOut} className="nav-link" id="signOut">
-                    <FontAwesomeIcon id="icon" icon={faSignOutAlt} /> Sign Out
+                    <FontAwesomeIcon id="icon" icon={faSignOutAlt} /> 账户登出
                   </Link>
                 </NavItem>
               </Nav>
@@ -136,7 +113,7 @@ class App extends React.Component {
               <Route component={this.noMatch} />
             </Switch>
             <div className="footer">
-              <p>For help please see the <a className="text-link" href="https://aws.amazon.com/solutions/distributed-load-testing-on-aws/"
+              <p>需要更多帮助请参阅 <a className="text-link" href="https://aws.amazon.com/solutions/distributed-load-testing-on-aws/"
                  target="_blank"
                  rel="noopener noreferrer">
                   solution home page <FontAwesomeIcon size="sm" icon={faExternalLinkAlt}/>

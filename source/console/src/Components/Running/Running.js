@@ -7,29 +7,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 declare var awsConfig;
 
-// uncomment for local debugging
-// let awsConfig = {
-//     // ...
-//     cw_dashboard: 'https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#dashboards:name=EcsLoadTesting-taBBErFMeQ94',
-//     ecs_dashboard: 'https://us-east-1.console.aws.amazon.com/ecs/home?region=us-east-1#/clusters/DLT/tasks',
-//     aws_project_region: 'us-east-1',
-//     // aws_cognito_region: 'us-east-1',
-//     // aws_cognito_identity_pool_id: 'us-east-1:7a95e632-8a17-4995-a58b-5dd0d7a40408',
-//     // aws_user_pools_id: 'us-east-1_Oxfg70TB1',
-//     // aws_user_pools_web_client_id: '4aik5f9fc2ihsme1s45oumsofe',
-//     oauth: {},
-//     aws_cloud_logic_custom: [
-//       {
-//         name: 'dlts',
-//         endpoint: 'https://ccbq80179d.execute-api.us-east-1.amazonaws.com/prod',
-//         region: 'us-east-1'
-//       }
-//     ],
-//     aws_user_files_s3_bucket: 'dlt-scenariosbucket-j3ppagp24or3',
-//     aws_user_files_s3_bucket_region: 'us-east-1',
-//     // ...
-//   };
-
 class Running extends React.Component {
 
     render() {
@@ -55,9 +32,9 @@ class Running extends React.Component {
         return (
             <div>
                 <div className="box">
-                    <h3>Tasks Status:</h3>
+                    <h3>任务状态:</h3>
                     <span className="console">
-                        Details for the running tasks can be viewed in the <a className="text-link"
+                        执行中任务的详细信息可查看 <a className="text-link"
                         href={awsConfig.ecs_dashboard}
                         target="_blank"
                         rel="noopener noreferrer">
@@ -68,38 +45,37 @@ class Running extends React.Component {
                     <Row>
                         <Col sm="3">
                             <div className="result">
-                                <b>Task Count:</b><span>{this.props.data.tasks.length} of {this.props.data.taskCount}</span>
+                                <b>总任务数量:</b><span>{this.props.data.tasks.length} of {this.props.data.taskCount}</span>
                             </div>
                         </Col>
                         <Col sm="3">
                             <div className="result">
-                                <b>Provisioning Count:</b><span>{provisioning}</span>
+                                <b>配置任务数量:</b><span>{provisioning}</span>
                             </div>
                         </Col>
                         <Col sm="3">
                             <div className="result">
-                                <b>Pending Count:</b><span>{pending}</span>
+                                <b>等待任务数量:</b><span>{pending}</span>
                             </div>
                         </Col>
                         <Col sm="3">
                             <div className="result">
-                                <b>Running Count:</b><span>{running}</span>
+                                <b>执行任务数量:</b><span>{running}</span>
                             </div>
                         </Col>
                     </Row>
                 </div>
                 <div className="box">
-                <h3>Realtime Avg Response Times</h3>
+                <h3>实时平均返回时间</h3>
                     <p className="console">
-                    The realtime Average response times can be monitored using the <a className="text-link"
+                        可通过 <a className="text-link"
                         href={ awsConfig.cw_dashboard}
                         target="_blank"
                         rel="noopener noreferrer">
                         Amazon CloudWatch Metrics Dashboard <FontAwesomeIcon size="sm" icon={faExternalLinkAlt}/>
-                        </a>
+                        </a>进行监控实时平均返回时间
                     </p>
-                    <p className="note"> Response times will start to populate once the tasks are running, task are launched in batches of 10
-                        and it can take 1-2 minutes for all tasks to be running.</p>
+                    <p className="note"> 任务运行后，响应时间将开始增加，10个任务作为1个批次启动，任务较多（400）的情况下所有任务启动需要等待5-6分钟左右</p>
                 </div>
             </div>
         )

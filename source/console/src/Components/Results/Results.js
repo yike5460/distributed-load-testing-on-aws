@@ -99,25 +99,25 @@ class Results extends React.Component {
                 <Row>
                     <Col sm="3">
                         <div className="result">
-                            Avg Response Time
+                            平均响应时间
                             <p>{data.avg_rt}s</p>
                         </div>
                     </Col>
                     <Col sm="3">
                         <div className="result">
-                            Avg Latency
+                            平均时延
                             <p>{data.avg_lt}s</p>
                         </div>
                     </Col>
                     <Col sm="3">
                         <div className="result">
-                            Avg Connection Time
+                            平均连接时间
                             <p>{data.avg_ct}s</p>
                         </div>
                     </Col>
                     <Col sm="3">
                         <div className="result">
-                            Avg Bandwidth
+                            平均带宽
                             <p>{ this.caculateBandwidth(data.bytes, testDuration) }</p>
                         </div>
                     </Col>
@@ -125,22 +125,22 @@ class Results extends React.Component {
                 <Row>
                     <Col sm="3">
                         <div className="result">
-                            <b>Total Count:</b><span>{data.throughput}</span>
+                            <b>请求数量:</b><span>{data.throughput}</span>
                         </div>
                     </Col>
                     <Col sm="3">
                         <div className="result">
-                            <b>Success Count:</b><span>{data.succ}</span>
+                            <b>成功数量:</b><span>{data.succ}</span>
                         </div>
                     </Col>
                     <Col sm="3">
                         <div className="result">
-                            <b>Error Count:</b><span>{data.fail}</span>
+                            <b>错误数量:</b><span>{data.fail}</span>
                         </div>
                     </Col>
                     <Col sm="3">
                         <div className="result">
-                            <b>Requests Per Second:</b><span>{testDuration > 0 ? Math.round(data.throughput * 100 / testDuration) / 100 : '-'}</span>
+                            <b>每秒请求数量:</b><span>{testDuration > 0 ? Math.round(data.throughput * 100 / testDuration) / 100 : '-'}</span>
                         </div>
                     </Col>
                 </Row>
@@ -148,7 +148,7 @@ class Results extends React.Component {
                     errors &&
                     <Row>
                         <Col sm="12">
-                            <h3>Errors</h3>
+                            <h3>错误</h3>
                         </Col>
                     </Row>
                 }
@@ -224,12 +224,11 @@ class Results extends React.Component {
                 );
             }
         }
-        console.log(this.props.data)
         return (
             <div>
                 <div className="box">
-                    <h2>Test Results</h2>
-                    <Button id="info" color="link"><FontAwesomeIcon id="icon" icon={faInfoCircle} /> Info</Button>
+                    <h2>测试结果</h2>
+                    <Button id="info" color="link"><FontAwesomeIcon id="icon" icon={faInfoCircle} /> 信息</Button>
                     <Row>
                         <Col xs="6" sm="3" md="3">
                             <Nav tabs vertical pills>
@@ -251,17 +250,17 @@ class Results extends React.Component {
                 </div>
 
                 <Popover className="info" placement="top" isOpen={this.state.info} target="info" toggle={this.toggle}>
-                    <PopoverHeader>Results Details</PopoverHeader>
+                    <PopoverHeader>结果详情</PopoverHeader>
                     <PopoverBody>
-                        <li><b>Avg Response Time (AvgRt):</b> the average response time in seconds for all requests.</li>
-                        <li><b>Avg Latency (AvgLt):</b> the average latency in seconds for all requests.</li>
-                        <li><b>Avg Connection Time (AvgCt):</b> the average connection time in seconds for all requests.</li>
-                        <li><b>Avg Bandwidth:</b> the average bandwidth for all requests.</li>
-                        <li><b>Total Count:</b> the total number of requests.</li>
-                        <li><b>Success Count:</b> the total number of success requests.</li>
-                        <li><b>Error Count:</b> the total number of errors.</li>
-                        <li><b>Requests Per Second:</b> the average requests per seconds for all requests.</li>
-                        <li><b>Percentiles:</b> percentile levels for the response time, 0 is also minimum response time, 100 is maximum response time.</li>
+                        <li><b>平均响应时间 (AvgRt):</b> 所有请求的平均响应时间（秒）</li>
+                        <li><b>平均时延 (AvgLt):</b> 所有请求的平均时延（秒）</li>
+                        <li><b>平均连接时间 (AvgCt):</b> 所有请求的平均连接时间（秒）</li>
+                        <li><b>平均带宽:</b> 所有请求的平均带宽</li>
+                        <li><b>请求数量:</b> 所有请求数量</li>
+                        <li><b>成功数量:</b> 所有请求成功数量</li>
+                        <li><b>错误数量:</b> 所有请求错误数量</li>
+                        <li><b>每秒请求数量:</b> 每秒平均请求</li>
+                        <li><b>响应时间百分比:</b> 按百分比分段展示的响应时间，100%代表所有请求，依此类推</li>
                     </PopoverBody>
                 </Popover>
             </div>

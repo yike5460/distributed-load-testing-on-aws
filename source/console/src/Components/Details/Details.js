@@ -238,14 +238,14 @@ class Details extends React.Component {
 
         const cancelled = (
             <div className="box">
-                <h2>Test Results</h2>
+                <h2>测试结果</h2>
                 <p>No results available as the test was cancelled.</p>
             </div>
         )
 
         const failed = (
             <div className="box">
-                <h2>Test Failed</h2>
+                <h2>测试失败</h2>
                 <h6>
                     <pre>{JSON.stringify(data.taskError, null, 2) || data.errorReason}</pre>
                 </h6>
@@ -255,19 +255,19 @@ class Details extends React.Component {
         const details = (
             <div>
                 <div className="box">
-                    <h1>Load Test Details</h1>
+                    <h1>压测结果详情</h1>
                     {
                         data.status === 'running' ?
                         [
-                            <Button id="cancelButton" key="cancelButton" color="danger" onClick={this.cancelToggle} size="sm">Cancel</Button>,
-                            <Button id="refreshButton" key="refreshButton" onClick={ this.reloadData } size="sm">Refresh</Button>
+                            <Button id="cancelButton" key="cancelButton" color="danger" onClick={this.cancelToggle} size="sm">取消测试</Button>,
+                            <Button id="refreshButton" key="refreshButton" onClick={ this.reloadData } size="sm">刷新</Button>
                         ] :
                         [
-                            <Button id="deleteButton" key="deleteButton" color="danger" onClick={this.deleteToggle} size="sm">Delete</Button>,
+                            <Button id="deleteButton" key="deleteButton" color="danger" onClick={this.deleteToggle} size="sm">删除测试</Button>,
                             <Link key="update_link" to= {{ pathname: '/create', state: { data } }}>
-                                <Button id="updateButton" key="updateButton" size="sm">Update</Button>
+                                <Button id="updateButton" key="updateButton" size="sm">更新测试</Button>
                             </Link>,
-                            <Button id="startButton" key="startButton" onClick={this.handleStart} size="sm" disabled={this.state.runningTasks}>Start</Button>
+                            <Button id="startButton" key="startButton" onClick={this.handleStart} size="sm" disabled={this.state.runningTasks}>开始测试</Button>
                         ]
                     }
                 </div>
@@ -275,30 +275,30 @@ class Details extends React.Component {
                     <Row>
                         <Col sm="7">
                             <Row className="detail">
-                                <Col sm="3"><b>ID</b></Col>
+                                <Col sm="3"><b>标识</b></Col>
                                 <Col sm="9">{data.testId}</Col>
                             </Row>
                             <Row className="detail">
-                                <Col sm="3"><b>NAME</b></Col>
+                                <Col sm="3"><b>名称</b></Col>
                                 <Col sm="9">{data.testName}</Col>
                             </Row>
                             <Row className="detail">
-                                <Col sm="3"><b>DESCRIPTION</b></Col>
+                                <Col sm="3"><b>描述</b></Col>
                                 <Col sm="9">{data.testDescription}</Col>
                             </Row>
                             {
                                 (!data.testType || ['', 'simple'].includes(data.testType)) &&
                                 <div>
                                     <Row className="detail">
-                                        <Col sm="3"><b>ENDPOINT</b></Col>
+                                        <Col sm="3"><b>访问端点</b></Col>
                                         <Col sm="9">{ data.endpoint }</Col>
                                     </Row>
                                     <Row className="detail">
-                                        <Col sm="3"><b>METHOD</b></Col>
+                                        <Col sm="3"><b>方法</b></Col>
                                         <Col sm="9">{ data.method }</Col>
                                     </Row>
                                     <Row className="detail">
-                                        <Col sm="3"><b>HEADERS</b></Col>
+                                        <Col sm="3"><b>HTTP请求</b></Col>
                                         <Col sm="9">
                                             <AceEditor
                                                 id="headers"
@@ -316,7 +316,7 @@ class Details extends React.Component {
                                         </Col>
                                     </Row>
                                     <Row className="detail">
-                                        <Col sm="3"><b>BODY</b></Col>
+                                        <Col sm="3"><b>HTTP主体</b></Col>
                                         <Col sm="9">
                                             <AceEditor
                                                 id="body"
@@ -345,35 +345,35 @@ class Details extends React.Component {
                         </Col>
                         <Col sm="5">
                             <Row className="detail">
-                                <Col sm="4"><b>STATUS</b></Col>
+                                <Col sm="4"><b>状态</b></Col>
                                 <Col className={data.status} sm="8">{data.status}</Col>
                             </Row>
                             <Row className="detail">
-                                <Col sm="4"><b>STARTED AT</b></Col>
+                                <Col sm="4"><b>开始时间</b></Col>
                                 <Col sm="8">{data.startTime}</Col>
                             </Row>
                             {
                                 data.status === 'complete' &&
                                 <Row className="detail">
-                                    <Col sm="4"><b>ENDED AT</b></Col>
+                                    <Col sm="4"><b>结束时间</b></Col>
                                     <Col sm="8">{data.endTime}</Col>
                                 </Row>
                             }
                             <Row className="detail">
-                                <Col sm="4"><b>TASK COUNT</b></Col>
+                                <Col sm="4"><b>任务数量</b></Col>
                                 <Col sm="8">{data.taskCount} {data.status === 'complete' && data.completeTasks !== undefined && `(${data.completeTasks} completed)`}</Col>
                             </Row>
 
                             <Row className="detail">
-                                <Col sm="4"><b>CONCURRENCY</b></Col>
+                                <Col sm="4"><b>并发量</b></Col>
                                 <Col sm="8">{ data.concurrency }</Col>
                             </Row>
                             <Row className="detail">
-                                <Col sm="4"><b>RAMP UP</b></Col>
+                                <Col sm="4"><b>预热时间</b></Col>
                                 <Col sm="8">{ data.rampUp }</Col>
                             </Row>
                             <Row className="detail">
-                                <Col sm="4"><b>HOLD FOR</b></Col>
+                                <Col sm="4"><b>持续时间</b></Col>
                                 <Col sm="8">{ data.holdFor }</Col>
                             </Row>
                         </Col>
@@ -398,8 +398,8 @@ class Details extends React.Component {
                         This will delete the test scenario and all of of the results
                     </ModalBody>
                     <ModalFooter>
-                        <Button id="cancelDeleteButton" color="link" size="sm" onClick={this.deleteToggle}>Cancel</Button>
-                        <Button id="deleteConfirmButton" color="danger" size="sm" onClick={this.deleteTest}>Delete</Button>
+                        <Button id="cancelDeleteButton" color="link" size="sm" onClick={this.deleteToggle}>取消</Button>
+                        <Button id="deleteConfirmButton" color="danger" size="sm" onClick={this.deleteTest}>删除</Button>
                     </ModalFooter>
                 </Modal>
 
@@ -409,8 +409,8 @@ class Details extends React.Component {
                         This will stop all running tasks and end the test.
                     </ModalBody>
                     <ModalFooter>
-                        <Button id="cancelStopButton" color="link" size="sm" onClick={this.cancelToggle}>Cancel</Button>
-                        <Button id="cancelTestButton" color="danger" size="sm" onClick={this.cancelTest}>Cancel Test</Button>
+                        <Button id="cancelStopButton" color="link" size="sm" onClick={this.cancelToggle}>取消</Button>
+                        <Button id="cancelTestButton" color="danger" size="sm" onClick={this.cancelTest}>取消测试</Button>
                     </ModalFooter>
                 </Modal>
 

@@ -294,7 +294,7 @@ class Create extends React.Component {
         const warning = (
             <div>
                 <div className="box">
-                    <h1>{ this.state.testId === null ? 'Create' : 'Update' } Load Test</h1>
+                    <h1>{ this.state.testId === null ? '创建' : '更新' }压力测试</h1>
                 </div>
                 <p className="warning">Warning there is a test running, multiple concurrent tests is currently not supported to avoid hitting the AWS Fargate task limits. Please wait for the test to finish before submitting a new test!</p>
             </div>
@@ -303,7 +303,7 @@ class Create extends React.Component {
 
         const heading = (
             <div className="box">
-                <h1>{ this.state.testId === null ? 'Create' : 'Update' } Load Test</h1>
+                <h1>{ this.state.testId === null ? '创建' : '更新' }压力测试</h1>
             </div>
         )
 
@@ -312,9 +312,9 @@ class Create extends React.Component {
                 <Row>
                     <Col sm="6">
                         <div className="box create-box">
-                            <h3>General Settings</h3>
+                            <h3>基础设置</h3>
                             <FormGroup>
-                                <Label for="testName">Name</Label>
+                                <Label for="testName">测试例名称</Label>
                                 <Input
                                     value={this.state.formValues.testName}
                                     type="text"
@@ -324,11 +324,11 @@ class Create extends React.Component {
                                     onChange={this.handleInputChange}
                                 />
                                 <FormText color="muted">
-                                    The name of your load test, doesn't have to be unique.
+                                    测试例名称，可以非全局唯一
                                 </FormText>
                             </FormGroup>
                             <FormGroup>
-                                <Label for="testDescription">Description</Label>
+                                <Label for="testDescription">测试例描述</Label>
                                 <Input
                                     value={this.state.formValues.testDescription}
                                     type="textarea"
@@ -338,11 +338,11 @@ class Create extends React.Component {
                                     onChange={this.handleInputChange}
                                 />
                                 <FormText color="muted">
-                                    Short description of the test scenario.
+                                    测试场景描述
                                 </FormText>
                             </FormGroup>
                             <FormGroup>
-                                <Label for="taskCount">Task Count</Label>
+                                <Label for="taskCount">任务数量</Label>
                                 <Input
                                     value={this.state.formValues.taskCount}
                                     className="form-short"
@@ -356,13 +356,12 @@ class Create extends React.Component {
                                     onChange={this.handleInputChange}
                                 />
                                 <FormText color="muted">
-                                    Number of docker containers that will be launched in the Fargate cluster to run the
-                                    test scenario, max value 750.
+                                    最多可拉起的任务数量，每个任务对应一个容器，目前最大值750
                                 </FormText>
                             </FormGroup>
 
                             <FormGroup>
-                                <Label for="concurrency">Concurrency</Label>
+                                <Label for="concurrency">用户并发量</Label>
                                 <Input
                                     value={this.state.formValues.concurrency}
                                     className="form-short"
@@ -376,11 +375,11 @@ class Create extends React.Component {
                                     onChange={this.handleInputChange}
                                 />
                                 <FormText color="muted">
-                                    The number of concurrent virtual users generated per task, max value 500.
+                                    每个任务可以模拟的虚拟用户数量，目前最大值500
                                 </FormText>
                             </FormGroup>
                             <FormGroup>
-                                <Label for="rampUp">Ramp Up</Label>
+                                <Label for="rampUp">预热时间</Label>
                                 <InputGroup className="input-group-short">
                                     <Input
                                         value={this.state.formValues.rampUp}
@@ -400,17 +399,17 @@ class Create extends React.Component {
                                         id="rampUpUnits"
                                         onChange={this.handleInputChange}
                                     >
-                                        <option value="m">minutes</option>
-                                        <option value="s">seconds</option>
+                                        <option value="m">分钟</option>
+                                        <option value="s">秒钟</option>
                                     </Input>
                                 </InputGroup>
 
                                 <FormText color="muted">
-                                    The time to reach target concurrency.
+                                    达到预设并发量的预热时间
                                 </FormText>
                             </FormGroup>
                             <FormGroup>
-                                <Label for="holdFor">Hold For</Label>
+                                <Label for="holdFor">持续时间</Label>
                                 <InputGroup className="input-group-short">
                                     <Input
                                         value={this.state.formValues.holdFor}
@@ -431,12 +430,12 @@ class Create extends React.Component {
                                         id="holdForUnits"
                                         onChange={this.handleInputChange}
                                     >
-                                        <option value="m">minutes</option>
-                                        <option value="s">seconds</option>
+                                        <option value="m">分钟</option>
+                                        <option value="s">秒钟</option>
                                     </Input>
                                 </InputGroup>
                                 <FormText color="muted">
-                                    Time to hold target concurrency.
+                                    保持预设并发量的持续时间
                                 </FormText>
                             </FormGroup>
                         </div>
@@ -445,7 +444,7 @@ class Create extends React.Component {
                         <div className="box create-box">
                             <h3>Scenario</h3>
                             <FormGroup>
-                                <Label for="testType">Test Type</Label>
+                                <Label for="testType">测试类型</Label>
                                 <Input
                                     type="select"
                                     id="testType"
@@ -454,7 +453,7 @@ class Create extends React.Component {
                                     value={this.state.formValues.testType}
                                     onChange={this.handleInputChange}
                                 >
-                                    <option value="simple">Single HTTP Endpoint</option>
+                                    <option value="simple">HTTP端点</option>
                                     <option value="jmeter">JMeter</option>
                                 </Input>
                             </FormGroup>
@@ -462,7 +461,7 @@ class Create extends React.Component {
                                 this.state.formValues.testType === 'simple' &&
                                 <div>
                                     <FormGroup>
-                                        <Label for="endpoint">HTTP endpoint under test</Label>
+                                        <Label for="endpoint">进行测试的HTTP端点</Label>
                                         <Input
                                             value={this.state.formValues.endpoint}
                                             type="url"
@@ -472,12 +471,12 @@ class Create extends React.Component {
                                             onChange={this.handleInputChange}
                                         />
                                         <FormText color="muted">
-                                            Target URL to run tests against, supports http and https. i.e.
+                                            执行压力测试的目标URL, 支持HTTP和HTTPS，例如
                                             https://example.com:8080.
                                         </FormText>
                                     </FormGroup>
                                     <FormGroup>
-                                        <Label for="method">HTTP Method</Label>
+                                        <Label for="method">HTTP方法</Label>
                                         <Input
                                             value={this.state.formValues.method}
                                             className="form-short"
@@ -494,11 +493,11 @@ class Create extends React.Component {
                                         </Input>
 
                                         <FormText color="muted">
-                                            The request method, default is GET.
+                                            请求方法，默认为GET.
                                         </FormText>
                                     </FormGroup>
                                     <FormGroup>
-                                        <Label for="testDescription">HTTP Headers (Optional)</Label>
+                                        <Label for="testDescription">HTTP报文头(可选)</Label>
                                         <AceEditor
                                             id="headers"
                                             mode="json"
@@ -516,11 +515,11 @@ class Create extends React.Component {
                                             }}
                                         />
                                         <FormText color="muted">
-                                            A valid JSON object key-value pair containing headers to include in the requests.
+                                            包含在HTTP请求报文头中的键值内容，JSON格式
                                         </FormText>
                                     </FormGroup>
                                     <FormGroup>
-                                        <Label>Body Payload (Optional)</Label>
+                                        <Label>HTTP请求报文主体内容(可选)</Label>
                                         <AceEditor
                                             id="bodyPayload"
                                             mode="json"
@@ -538,7 +537,7 @@ class Create extends React.Component {
                                             }}
                                         />
                                         <FormText color="muted">
-                                            A valid JSON object containing any body text to include in the requests.
+                                            包含在HTTP请求报文主体中的键值内容，JSON格式
                                         </FormText>
                                     </FormGroup>
                                 </div>
@@ -580,7 +579,7 @@ class Create extends React.Component {
                                     (this.state.formValues.testType !== 'simple' && (!this.state.file && (this.state.chooseNewFile || !['zip', 'script'].includes(this.state.formValues.fileType))))
                                 }
                             >
-                                Submit
+                                提交
                             </Button>
                             <Button
                                 id="cancelButton"
@@ -590,7 +589,7 @@ class Create extends React.Component {
                                 onClick={cancel}
                                 disabled={this.state.isLoading}
                             >
-                                Cancel
+                                取消
                             </Button>
                         </div>
                     </Col>
