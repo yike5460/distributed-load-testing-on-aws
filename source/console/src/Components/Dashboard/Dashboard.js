@@ -50,7 +50,7 @@ class Dashboard extends React.Component {
 
         const welcome = (
             <div className="welcome">
-                <h2>To get started select Create test from the top menu.</h2>
+                <h2>点击创建测试开始进行您的第一个测试</h2>
             </div>
         )
 
