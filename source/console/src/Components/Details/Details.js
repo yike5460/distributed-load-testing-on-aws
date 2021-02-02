@@ -338,8 +338,9 @@ class Details extends React.Component {
                             {
                                 data.testType && data.testType !== '' && data.testType !== 'simple' &&
                                 <Row className="detail">
-                                    <Col sm="3"><b>{ data.fileType === 'zip' ? 'ZIP' : 'SCRIPT' }</b></Col>
-                                    <Col sm="9"><Button className="btn-link-custom" color="link" size="sm" onClick={this.handleDownload}>Download</Button></Col>
+                                    <Col sm="3"><b>{ data.fileType === 'zip' ? 'ZIP包' : 'JMX脚本' }</b></Col>
+                                    {/* <Col sm="9"><Button className="btn-link-custom" color="link" size="sm" onClick={this.handleDownload}>下载脚本</Button></Col> */}
+                                    <Col sm="9"><b>{ '请跳转到https://console.amazonaws.cn/s3，按照以下路径查看：scenariobucket/public/test-scenarios/jmeter/TESTID.jmx' }</b></Col>
                                 </Row>
                             }
                         </Col>

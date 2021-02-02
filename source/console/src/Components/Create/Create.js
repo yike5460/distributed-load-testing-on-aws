@@ -21,6 +21,8 @@ import * as shortid from 'shortid';
 
 import 'brace/theme/github';
 
+declare var awsConfig;
+
 // Upload file size limit
 const FILE_SIZE_LIMIT = 50 * 1024 * 1024;
 
@@ -442,7 +444,7 @@ class Create extends React.Component {
                     </Col>
                     <Col sm="6">
                         <div className="box create-box">
-                            <h3>Scenario</h3>
+                            <h3>测试场景</h3>
                             <FormGroup>
                                 <Label for="testType">测试类型</Label>
                                 <Input
@@ -549,22 +551,22 @@ class Create extends React.Component {
                                         ['zip', 'script'].includes(this.state.formValues.fileType) &&
                                         <FormGroup check>
                                             <Label check>
-                                                <Input id="newScriptCheckboux" type="checkbox" onClick={this.handleCheckBox} defaultChecked={this.state.chooseNewFile} /> Choose a new file.
+                                                <Input id="newScriptCheckboux" type="checkbox" onClick={this.handleCheckBox} defaultChecked={this.state.chooseNewFile} /> 选择一个新文件
                                             </Label>
                                         </FormGroup>
                                     }
                                     {
                                         ((this.state.formValues.testType !== 'simple' && !['zip', 'script'].includes(this.state.formValues.fileType)) || this.state.chooseNewFile) &&
                                         <FormGroup>
-                                            <Label for="fileUpload">Upload File</Label>
-                                            <CustomInput
+                                            <Label for="fileUpload">上传文件</Label>
+                                            {/* <CustomInput
                                                 type="file"
                                                 id="fileUpload"
                                                 name="fileUpload"
                                                 onChange={this.handleFileChange}
-                                                disabled={this.state.runningTasks} />
+                                                disabled={this.state.runningTasks} /> */}
                                             <FormText color="muted">
-                                                You can choose either a <code>.jmx</code> file or a <code>.zip</code> file. Choose <code>.zip</code> file if you have any files to upload other than a <code>.jmx</code> script file.
+                                                请跳转到https://console.amazonaws.cn/s3，按照以下路径上传：{awsConfig.aws_user_files_s3_bucket}/public/test-scenarios/jmeter/[TESTID].jmx，其中TESTID为您测试用例的唯一标示（如x7-TL9Gup），您可以选择 <code>.jmx</code> 文件或者 <code>.zip</code> 文件。
                                             </FormText>
                                         </FormGroup>
                                     }
@@ -575,8 +577,8 @@ class Create extends React.Component {
                                 className="submit"
                                 size="sm"
                                 onClick={this.handleSubmit}
-                                disabled={this.state.runningTasks ||
-                                    (this.state.formValues.testType !== 'simple' && (!this.state.file && (this.state.chooseNewFile || !['zip', 'script'].includes(this.state.formValues.fileType))))
+                                disabled={this.state.runningTasks
+                                    // (this.state.formValues.testType !== 'simple' && (!this.state.file && (this.state.chooseNewFile || !['zip', 'script'].includes(this.state.formValues.fileType))))
                                 }
                             >
                                 提交
