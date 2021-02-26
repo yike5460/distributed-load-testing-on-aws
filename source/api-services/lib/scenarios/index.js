@@ -190,9 +190,10 @@ const createTest = async (config) => {
         // Hold for
         validateTimeUnit('hold-for', 1);
 
-        for (var val in testScenario.scenarios) {
-            testScenario.scenarios[val].timeout = "5s"
-        }
+        // for (var val in testScenario.scenarios) {
+        //     testScenario.scenarios[val].timeout = "30s"
+        // }
+
         // Add reporting to Test Scenario so that the end results are export to
         // Amazon s3 by each task.
         testScenario.reporting = [{
